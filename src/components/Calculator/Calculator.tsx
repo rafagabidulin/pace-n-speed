@@ -1,26 +1,34 @@
 import React, { useState } from 'react';
 import DistanceButton from '../DistanceButton/DistanceButton';
 import FormComponent from '../FormComponent/FormComponent';
+import Pace from '../Pace/Pace';
+import Time from '../Time/Time';
 
 const Calculator = () => {
   const [distanceValue, setDistanceValue] = useState('');
-  const [paceValue, setPaceValue] = useState('');
+  const [firstPaceValue, setFirstPaceValue] = useState('');
+  const [secondPaceValue, setSecondPaceValue] = useState('');
   const [timeValue, setTimeValue] = useState('');
   const [speedValue, setSpeedValue] = useState('');
 
   const calcTimeValue = (e) => {
-    setPaceValue(e.target.value);
-    setTimeValue(distanceValue / paceValue);
+    setFirstPaceValue(e.target.value);
+    setTimeValue(Math.round(distanceValue / e.target.value));
   };
 
-  const calcPaceValue = (e) => {
+  const calcFirstPaceValue = (e) => {
     setTimeValue(e.target.value);
-    setPaceValue(distanceValue / timeValue);
+    setFirstPaceValue(distanceValue / e.target.value);
+  };
+
+  const calcSecondPaceValue = (e) => {
+    setSpeedValue(e.target.value);
+    setSecondPaceValue(speedValue / e.target.value);
   };
 
   const calcSpeedValue = (e) => {
-    setPaceValue(e.target.value);
-    setSpeedValue(paceValue / 10);
+    setSecondPaceValue(e.target.value);
+    setSpeedValue(secondPaceValue / 10);
   };
 
   return (
@@ -41,32 +49,32 @@ const Calculator = () => {
           title='Дистанция'
           onChange={(e) => setDistanceValue(e.target.value)}
         />
-        <FormComponent
+        <Pace
           type='number'
-          value={paceValue}
+          value={firstPaceValue}
           title='Темп'
-          onChange={(e) => calcPaceValue(e)}
+          onChange={(e) => calcTimeValue(e)}
         />
-        <FormComponent
+        <Time
           type='number'
           value={timeValue}
           title='Время'
-          onChange={(e) => calcTimeValue(e)}
+          onChange={(e) => calcFirstPaceValue(e)}
         />
       </div>
       <h2 className='my-3 d-flex justify-content-center'>Темп/скорость</h2>
       <div className='d-flex justify-content-center'>
-        <FormComponent
+        <Pace
           type='number'
-          value={paceValue}
+          value={secondPaceValue}
           title='Темп'
-          onChange={(e) => calcPaceValue(e)}
+          onChange={(e) => calcSpeedValue(e)}
         />
         <FormComponent
           type='number'
           value={speedValue}
           title='Скорость'
-          onChange={(e) => calcSpeedValue(e)}
+          onChange={(e) => calcSecondPaceValue(e)}
         />
       </div>
     </div>
